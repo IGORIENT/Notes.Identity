@@ -1,12 +1,15 @@
+using Notes.Identity;
+
 using Duende.IdentityServer.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//добавляем все то, что описали в Cpnfiguration.cs
 builder.Services.AddIdentityServer()
-    .AddInMemoryApiResources(new List<ApiResource>())
-    .AddInMemoryIdentityResources(new List<IdentityResource>())
-    .AddInMemoryApiScopes(new List<ApiScope>())
-    .AddInMemoryClients(new List<Client>())
+    .AddInMemoryApiResources(Configuration.ApiResiurces) 
+    .AddInMemoryIdentityResources(Configuration.IdentityResources)
+    .AddInMemoryApiScopes(Configuration.ApiScopes)
+    .AddInMemoryClients(Configuration.Clients)
     .AddDeveloperSigningCredential();
 
 var app = builder.Build();
