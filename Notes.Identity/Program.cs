@@ -3,6 +3,7 @@ using Notes.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Notes.Identity.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,8 +49,14 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LogoutPath = "/Auth/Logout";
 });
 
+builder.Services.AddControllersWithViews();  // подключили MVC
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -71,9 +78,17 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Styles")),
+    RequestPath = "/styles"
+});
+
+app.UseRouting();  //мидл ware для роутинга команд на их обработчики
+
 app.UseIdentityServer();
 
-app.MapGet("/", () => "Hello World!");
+app.MapDefaultControllerRoute(); //подключили маппинг роутига по имени контроллеров
 
 app.Run();
 
