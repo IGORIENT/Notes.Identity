@@ -1,4 +1,4 @@
-﻿@model LoginViewModel
+﻿@model LoginViewModel  //связывает с моделью нашу вьюшку
 <head>
     <link href=@Url.Content("~/styles/app.css") rel="stylesheet" type="text/css"/>
 </head>
@@ -7,13 +7,21 @@
     <div class="header"> Login</div>
     <div class="block">
         <label>Username</label>
-        <input asp-for="Username" class="input" />
+        <input asp-for="Username" class="input" />  @* input - поле ввода текста *@
+        <span asp-validation-for="Username"></span>
     </div>
     <div class="block">
         <label>Password</label>
         <input asp-for="Password" class="input"/>
+        <span asp-validation-for="Password"></span>
     </div>
     <div class="block"> 
         <button type="submit" class="button">Sign In</button> @* отправляет форму методом POST *@
     </div>
+
+    @* переход на страницу регистрации - происходит переход по ссылке - это GET запрос. *@
+    <a asp-controller="Auth" 
+    asp-action="Register" 
+    asp-route-returnUrl="@Model.ReturnUrl"
+    class="switch-button">Register</a>
 </form>

@@ -62,6 +62,39 @@ namespace Notes.Identity.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
+        {
+            var viewmodel = new RegisterViewModel 
+            {
+                ReturnUrl = returnUrl 
+            };
+            return View(viewmodel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel viewModel)
+        {
+            if (!ModelState.IsValid) //модел стэйт заполняется благодаря атрибутам [Required], [DataType]
+            {
+                return View(viewModel);//возвращаем ту же страницу
+            }
+
+            var user = new AppUser
+            {
+                UserName = viewModel.Username,
+            };
+
+            var result = await _userManager.CreateAsync(user, viewModel.Password);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, false);
+                return Redirect(viewModel.ReturnUrl);  //выполняет перенаправление на нужную страницу.
+            }
+            ModelState.AddModelError(string.Empty, "Error occurred");
+            return View(viewModel);//возвращаем ту же страницу
+        }
+
         //если не указать атрибуты на эти методы - при запуске получим ошибку
         // "несколько эндпоинтов соответствуют вызову"
     }

@@ -1,0 +1,37 @@
+﻿@model RegisterViewModel
+<head>
+    <link href=@Url.Content("~/styles/app.css") rel="stylesheet" type="text/css" />  @* //подключаем таблицу стилей *@
+</head>
+<form asp-controller="Auth" asp-action="Register" method="post">  @* отправлять данную форму в AuthController в метод Post-Register *@
+    <input type="hidden" asp-for="ReturnUrl"/>
+    <div class="header">Sign Up</div>
+
+    @* имя пользователя *@
+    <div class="block">
+        <label>Username</label>
+        <input asp-for="Username" class="input"/>
+        <span asp-validation-for="Username"></span>
+    </div>
+
+    @* пароль *@
+    <div class="block">
+        <label>Password</label>
+        <input asp-for="Password" class="input"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    @* подтверждение пароля *@
+    <div class="block">
+        <label>PConfirm password</label>
+        <input asp-for="ConfirmPassword" class="input" />
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+
+    <div class="block">
+        <button type="submit" class="button">Sign Up</button>  @* submit - тип кнопки, которая отправляет данные на сервер *@
+    </div>
+
+    @* переход на страницу входа  - происходит переход по ссылке - это GET запрос. *@
+    <a asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" 
+        class="swith-button">Login</a>
+</form>
